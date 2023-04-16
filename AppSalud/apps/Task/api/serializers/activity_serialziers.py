@@ -44,8 +44,8 @@ class ActivitySerializers(serializers.Serializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name",instance.name)
-        instance.listTask = validated_data.get("list_task",instance.list_task)
-        instance.typeActivity = validated_data.get("type_activity",instance.type_activity)
+        instance.listTask = validated_data.get("list_task",instance.listTask)
+        instance.typeActivity = validated_data.get("type_activity",instance.typeActivity)
         instance.repeat = validated_data.get("repeat",instance.repeat)
         instance.save()
         return instance

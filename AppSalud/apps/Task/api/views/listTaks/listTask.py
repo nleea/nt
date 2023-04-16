@@ -18,3 +18,67 @@ class CreateListTask(APIView):
             return Response("Ok")
         
         return Response(serializers.errors)
+
+
+class UpdateListTaks(APIView):
+
+    http_method_names = ["put"]
+    
+    def _allowed_methods(self):
+        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
+            
+
+    
+    def get_object(self):
+        try:
+            pk = self.kwargs["pk"]
+            instance = ListTask.objects.get(pk=pk)
+            return instance
+        except ListTask.DoesNotExist:
+            return None
+    
+    
+    def put(self,request,*args, **kwargs):
+        instanceOrNone = self.get_object()
+        
+        if instanceOrNone is None:
+            return Response("Do not Exist")
+        
+        taskUpdate = ListTaskSerializers(instance=instanceOrNone,data=request.data,partial=True)
+        
+        if taskUpdate.is_valid():
+            taskUpdate.save()
+            return Response("Ok")
+        
+        return Response(taskUpdate.errors)
+
+
+class DeleteListTask(APIView):
+    
+    http_method_names = ["delete"]
+    
+    def _allowed_methods(self):
+        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
+
+    
+    def get_object(self):
+        try:
+            pk = self.kwargs["pk"]
+            instance = ListTask.objects.get(pk=pk)
+            return instance
+        except ListTask.DoesNotExist:
+            return None
+    
+    
+    def delete(self,request,*args, **kwargs):
+        instanceOrNone = self.get_object()
+        
+        if instanceOrNone is None:
+            return Response("Do not Exist")
+
+        try:
+            instanceOrNone.delete()
+        except Exception:
+            return Response("Error")
+
+        return Response("Ok")

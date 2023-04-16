@@ -19,13 +19,19 @@ class TaskSerializers(serializers.Serializer):
     class Meta:
         fields = "__all__"
     
-    
     def create(self, validated_data):
-        task = Task.objects.create(name=validated_data["name"],priority=validated_data["priority"],status=validated_data["status"])
-        return task
+        try:
+            task = Task.objects.create(name=validated_data["name"],priority=validated_data["priority"],status=validated_data["status"])
+            return task
+        except Exception:
+            raise Exception("Error saved the record")
 
     def update(self, instance, validated_data):
-        instance.priority = validated_data.get("priority",instance.priority)
-        instance.status = validated_data.get("status",instance.status)
-        instance.save()
-        return instance
+        try:
+            instance.priority = validated_data.get("priority",instance.priority)
+            instance.status = validated_data.get("status",instance.status)
+            instance.name = validated_data.get("name",instance.name)
+            instance.save()
+            return instance
+        except Exception:
+            raise Exception("Error updated the record")

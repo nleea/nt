@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from ...models.models import ListTask
 from .Taks_serializers import TaskSerializersView
-from .activity_serialziers import ActivitySerializersView
 
 class ListTaskSerializersView(serializers.Serializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
