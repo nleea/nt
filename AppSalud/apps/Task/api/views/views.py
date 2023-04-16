@@ -10,6 +10,7 @@ logger = logging.Logger("log")
 
 class ViewTask(APIView):
     def get(self,request,*args, **kwargs):
+        print(request.user)
         serializers = TaskSerializers(Task.objects.all(),many=True)
         return Response(serializers.data)
 
