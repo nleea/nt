@@ -42,7 +42,7 @@ class UpdateListTaks(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
         
         taskUpdate = ListTaskSerializers(instance=instanceOrNone,data=request.data,partial=True)
         
@@ -50,7 +50,7 @@ class UpdateListTaks(APIView):
             taskUpdate.save()
             return Response("Ok")
         
-        return Response(taskUpdate.errors)
+        return Response(taskUpdate.errors,status=400)
 
 
 class DeleteListTask(APIView):
@@ -74,11 +74,11 @@ class DeleteListTask(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
 
         try:
             instanceOrNone.delete()
         except Exception:
-            return Response("Error")
+            return Response("Error",status=400)
 
         return Response("Ok")

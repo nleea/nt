@@ -1,4 +1,3 @@
-from django.http import HttpResponseNotAllowed
 from rest_framework.views import APIView
 from ..serializers.Taks_serializers import TaskSerializers
 from rest_framework.response import Response
@@ -10,7 +9,6 @@ logger = logging.Logger("log")
 
 class ViewTask(APIView):
     def get(self,request,*args, **kwargs):
-        print(request.user)
         serializers = TaskSerializers(Task.objects.all(),many=True)
         return Response(serializers.data)
 
@@ -23,7 +21,7 @@ class CreateTask(APIView):
             serializers.save()
             return Response("Ok")
         
-        return Response(serializers.errors)
+        return Response(serializers.errors,status=400)
 
 
 class UpdateTask(APIView):
@@ -33,8 +31,6 @@ class UpdateTask(APIView):
     def _allowed_methods(self):
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
             
-
-    
     def get_object(self):
         try:
             pk = self.kwargs["pk"]
@@ -48,7 +44,7 @@ class UpdateTask(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
         
         taskUpdate = TaskSerializers(instance=instanceOrNone,data=request.data,partial=True)
         
@@ -56,7 +52,7 @@ class UpdateTask(APIView):
             taskUpdate.save()
             return Response("Ok")
         
-        return Response(taskUpdate.errors)
+        return Response(taskUpdate.errors,status=400)
 
 
 class DeleteTask(APIView):
@@ -80,11 +76,11 @@ class DeleteTask(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
 
         try:
             instanceOrNone.delete()
         except Exception:
-            return Response("Error")
+            return Response("Error",status=400)
 
         return Response("Ok")

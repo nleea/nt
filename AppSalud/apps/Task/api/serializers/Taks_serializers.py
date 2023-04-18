@@ -9,15 +9,18 @@ class TaskSerializersView(serializers.Serializer):
     
     class Meta:
         fields = "__all__"
+ 
+PRIORITY_CHOISES = (("L","LOW"),("M","MEDIUN"),("H","HIGHT"))
 
 class TaskSerializers(serializers.Serializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    priority = serializers.CharField()
+    priority = serializers.ChoiceField(PRIORITY_CHOISES)
     status = serializers.BooleanField()
     name = serializers.CharField()
     
     class Meta:
         fields = "__all__"
+    
     
     def create(self, validated_data):
         try:

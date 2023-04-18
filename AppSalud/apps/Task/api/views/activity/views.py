@@ -40,7 +40,7 @@ class UpdateTypeActivity(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
         
         taskUpdate = ActivityTypeSerializersView(instance=instanceOrNone,data=request.data,partial=True)
         
@@ -77,7 +77,7 @@ class DeleteTypeActivity(APIView):
         try:
             instanceOrNone.delete()
         except Exception:
-            return Response("Error")
+            return Response("Error",status=400)
 
         return Response("Ok")
 
@@ -119,7 +119,7 @@ class UpdateActivity(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
         
         taskUpdate = ActivitySerializers(instance=instanceOrNone,data=request.data,partial=True)
         
@@ -151,11 +151,11 @@ class DeleteActivity(APIView):
         instanceOrNone = self.get_object()
         
         if instanceOrNone is None:
-            return Response("Do not Exist")
+            return Response("Do not Exist",status=400)
 
         try:
             instanceOrNone.delete()
         except Exception:
-            return Response("Error")
+            return Response("Error",status=400)
 
         return Response("Ok")
