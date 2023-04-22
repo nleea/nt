@@ -33,7 +33,8 @@ ALLOWED_HOSTS = ["*"]
 
 THIRD_APPS = [
     "apps.authenticated",
-    "apps.Task"
+    "apps.Task",
+    "apps.foods"
 ]
 
 APPS_INSTALLED = [

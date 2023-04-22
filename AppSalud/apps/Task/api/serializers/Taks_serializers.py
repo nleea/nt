@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from ...models.models import Task
+from .base_serializers import BaseSerializers
 
-class TaskSerializersView(serializers.Serializer):
+class TaskSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     priority = serializers.CharField()
     status = serializers.BooleanField()
@@ -12,11 +13,12 @@ class TaskSerializersView(serializers.Serializer):
  
 PRIORITY_CHOISES = (("L","LOW"),("M","MEDIUN"),("H","HIGHT"))
 
-class TaskSerializers(serializers.Serializer):
+class TaskSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     priority = serializers.ChoiceField(PRIORITY_CHOISES)
     status = serializers.BooleanField()
     name = serializers.CharField()
+    
     
     class Meta:
         fields = "__all__"

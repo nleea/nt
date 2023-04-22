@@ -1,9 +1,13 @@
 from django.db import models
 from .Base_model import BaseModel
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Task(BaseModel):
     priority = models.CharField(max_length=256,choices=BaseModel.PRIORITY_CHOISES)
     status = models.BooleanField(default=True)
+    task_user = models.ForeignKey(User,on_delete=models.CASCADE) 
     
 
 class ListTask(BaseModel):

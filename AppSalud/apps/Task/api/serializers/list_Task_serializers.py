@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from ...models.models import ListTask
 from .Taks_serializers import TaskSerializersView
+from .base_serializers import BaseSerializers
 
-class ListTaskSerializersView(serializers.Serializer):
+class ListTaskSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     priority = serializers.CharField()
     task = TaskSerializersView()
@@ -10,7 +11,7 @@ class ListTaskSerializersView(serializers.Serializer):
     class Meta:
         fields = "__all__"
 
-class ListTaskSerializers(serializers.Serializer):
+class ListTaskSerializers(BaseSerializers):
     priority = serializers.CharField()
     task = serializers.IntegerField()
     name = serializers.CharField()

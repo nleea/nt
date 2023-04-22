@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from ...models.models import Activity,ActivityType
+from .base_serializers import BaseSerializers
 
-class ActivityTypeSerializersView(serializers.Serializer):
+class ActivityTypeSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
     
@@ -17,7 +18,7 @@ class ActivityTypeSerializersView(serializers.Serializer):
         instance.save()
         return instance
 
-class ActivitySerializersView(serializers.Serializer):
+class ActivitySerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
     listTask = serializers.SlugRelatedField("name",read_only=True)
@@ -27,7 +28,7 @@ class ActivitySerializersView(serializers.Serializer):
     class Meta:
         fields = "__all__"
 
-class ActivitySerializers(serializers.Serializer):
+class ActivitySerializers(BaseSerializers):
     name = serializers.CharField()
     list_task = serializers.IntegerField()
     type_activity = serializers.IntegerField()
@@ -38,9 +39,12 @@ class ActivitySerializers(serializers.Serializer):
     
     
     def create(self, validated_data):
-        activity = Activity.objects.create(name=validated_data["name"],listTask_id=validated_data["list_task"],
+        try:
+            activity = Activity.objects.create(name=validated_data["name"],listTask_id=validated_data["list_task"],
                                        typeActivity_id=validated_data["type_activity"],repeat=validated_data["repeat"])
-        return activity
+            return activity
+        except Exception as e:
+            raise serializers.ValidationError(e.args)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name",instance.name)
